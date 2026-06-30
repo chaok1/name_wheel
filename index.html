@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expanded Name Slot Machine</title>
+  <style>
+    :root {
+      --primary-color: #ff4757;
+      --secondary-color: #2f3542;
+      --accent-color: #ffa502;
+      --bg-color: #1e222b;
+      --card-bg: #2f3542;
+      --text-color: #ffffff;
+      --item-height: 80px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent-color);
+      text-shadow: 0 0 10px rgba(255, 165, 2, 0.5);
+    }
+
+    /* Slot Machine Frame */
+    .slot-machine {
+      background: linear-gradient(145px, #3a4150, #232832);
+      border: 8px solid #111;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 
+                  inset 0 0 20px rgba(255,255,255,0.1);
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    /* Expanded Viewport to show 3 rows simultaneously */
+    .slot-viewport {
+      height: calc(var(--item-height) * 3); /* 240px total */
+      background-color: #0f1115;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 15px 20px rgba(0,0,0,0.9),
+                  inset 0 -15px 20px rgba(0,0,0,0.9);
+      border: 3px solid #111;
+    }
+
+    /* Red targeting bracket lines framing ONLY the center row */
+    .slot-viewport::before, .slot-viewport::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      z-index: 5;
+    }
+    .slot-viewport::before { top: var(--item-height); }
+    .slot-viewport::after { bottom: var(--item-height); }
+
+    /* Subtle shading overlay to fade out the top and bottom "nearby" names */
+    .viewport-shade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(to bottom, 
+                    rgba(15,17,21,0.7) 0%, 
+                    transparent 30%, 
+                    transparent 70%, 
+                    rgba(15,17,21,0.7) 100%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* Moving Reel */
+    .slot-reel {
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0);
+    }
+
+    /* Slot Row Item */
+    .slot-item {
+      height: var(--item-height);
+      line-height: var(--item-height);
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #a4b0be; /* Default non-selected name color */
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 10px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Target Winner Highlights */
+    .slot-item.winner {
+      color: var(--accent-color);
+      font-size: 2.2rem;
+      text-shadow: 0 0 15px rgba(255, 165, 2, 0.8);
+      transform: scale(1.05);
+    }
+
+    /* Spin Button */
+    .spin-btn {
+      background: linear-gradient(to bottom, #ff6b81, #ff4757);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding: 15px 40px;
+      cursor: pointer;
+      margin-top: 25px;
+      box-shadow: 0 5px 0 #b33939, 0 8px 15px rgba(0,0,0,0.4);
+      transition: all 0.1s ease;
+      width: 100%;
+      letter-spacing: 1px;
+    }
+
+    .spin-btn:hover {
+      background: linear-gradient(to bottom, #ff7f93, #ff5263);
+    }
+
+    .spin-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #b33939, 0 3px 10px rgba(0,0,0,0.4);
+    }
+
+    .spin-btn:disabled {
+      background: #57606f;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: translateY(4px);
+    }
+
+    /* Settings Panel */
+    .settings-panel {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      margin-top: 10px;
+    }
+
+    .settings-panel summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #a4b0be;
+      outline: none;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      background-color: #1e222b;
+      border: 2px solid #57606f;
+      border-radius: 8px;
+      color: #fff;
+      padding: 10px;
+      margin-top: 15px;
+      resize: vertical;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>NAME ROULETTE</h1>
+
+  <div class="slot-machine">
+    <div class="slot-viewport">
+      <div class="viewport-shade"></div>
+      <div class="slot-reel" id="slotReel">
+        <div class="slot-item">READY</div>
+        <div class="slot-item.winner" style="color:var(--accent-color)">SPIN!</div>
+        <div class="slot-item">READY</div>
+      </div>
+    </div>
+    
+    <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN!</button>
+  </div>
+
+  <details class="settings-panel">
+    <summary>Edit Names List</summary>
+    <textarea id="namesInput">Kelsey
+Sean
+Indrayani
+Francis
+David
+Coleman
+Pierce
+Ramesh
+Philip
+Justin
+Chloe
+Roman
+Tai
+Isabel
+Monica
+Hannah
+Aya
+Jake
+Jing Wen
+Mark
+Raciel
+Ella
+Kenneth
+Jaquelyn
+Sammy
+JohnJack
+Danny
+Laura
+Cameron
+JohnPaul
+Valerie
+Alex
+Ananya</textarea>
+  </details>
+</div>
+
+<script>
+  const slotReel = document.getElementById('slotReel');
+  const spinBtn = document.getElementById('spinBtn');
+  const namesInput = document.getElementById('namesInput');
+  const itemHeight = 80; // Must match --item-height in CSS
+
+  function getNames() {
+    return namesInput.value
+      .split('\n')
+      .map(name => name.trim())
+      .filter(name => name.length > 0);
+  }
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function spin() {
+    const names = getNames();
+    
+    if (names.length === 0) {
+      alert("Please enter at least one name!");
+      return;
+    }
+
+    spinBtn.disabled = true;
+
+    // Reset layout physics
+    slotReel.style.transition = 'none';
+    slotReel.style.transform = 'translateY(0)';
+    slotReel.offsetHeight; // Trigger browser reflow
+
+    // Mix up structural padding blocks
+    const block1 = shuffle([...names]);
+    const block2 = shuffle([...names]);
+    const block3 = shuffle([...names]);
+    
+    const finalWinnerIndex = Math.floor(Math.random() * names.length);
+    const targetWinner = names[finalWinnerIndex];
+
+    // Build the tape. 
+    // Since the window shows 3 items, the first visible item during animation is placeholder index 0.
+    const reelItems = ['🎰 ROLLING 🎰', ...block1, ...block2, ...block3];
+    
+    // Track exactly where the winner is injected
+    const winnerPositionInReel = reelItems.length;
+    reelItems.push(targetWinner);
+    
+    // Append the following items so when the winner stops in the middle, 
+    // the bottom slot displays the true subsequent neighbors.
+    const remainingShuffled = shuffle([...names]);
+    reelItems.push(...remainingShuffled);
+
+    // Populate DOM
+    slotReel.innerHTML = reelItems
+      .map(name => `<div class="slot-item">${name}</div>`)
+      .join('');
+
+    const transitionDuration = 3.5; 
+    slotReel.style.transition = `transform ${transitionDuration}s cubic-bezier(0.12, 0.88, 0.31, 1)`;
+    
+    // PHYSICS CORRECTION: 
+    // To position the winner in row 2 (the middle), we offset the translation by exactly 1 item height.
+    const targetOffset = (winnerPositionInReel - 1) * itemHeight;
+    slotReel.style.transform = `translateY(-${targetOffset}px)`;
+
+    // Settlement sequence
+    setTimeout(() => {
+      const items = slotReel.querySelectorAll('.slot-item');
+      const winnerElement = items[winnerPositionInReel];
+      if (winnerElement) {
+        winnerElement.classList.add('winner');
+      }
+      spinBtn.disabled = false;
+    }, transitionDuration * 1000);
+  }
+</script>
+
+</body>
+</html>
