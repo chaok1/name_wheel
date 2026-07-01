@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-Row Name Slot Machine</title>
+  <title>5-Row Name Slot Machine (Anti-Duplicate)</title>
   <style>
     :root {
       --primary-color: #ff4757;
@@ -12,7 +12,7 @@
       --bg-color: #1e222b;
       --card-bg: #2f3542;
       --text-color: #ffffff;
-      --item-height: 80px; /* Balanced height for 5 rows */
+      --item-height: 80px;
     }
 
     * {
@@ -47,7 +47,6 @@
       text-shadow: 0 0 12px rgba(255, 165, 2, 0.5);
     }
 
-    /* Slot Machine Frame */
     .slot-machine {
       background: linear-gradient(145px, #3a4150, #232832);
       border: 10px solid #111;
@@ -59,9 +58,8 @@
       position: relative;
     }
 
-    /* Expanded Viewport to show 5 rows simultaneously */
     .slot-viewport {
-      height: calc(var(--item-height) * 5); /* 400px total height */
+      height: calc(var(--item-height) * 5); 
       background-color: #0f1115;
       border-radius: 12px;
       overflow: hidden;
@@ -71,7 +69,6 @@
       border: 4px solid #111;
     }
 
-    /* Red targeting bracket lines framing only the middle (3rd) row */
     .slot-viewport::before, .slot-viewport::after {
       content: '';
       position: absolute;
@@ -81,10 +78,9 @@
       background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
       z-index: 5;
     }
-    .slot-viewport::before { top: calc(var(--item-height) * 2); } /* 160px down */
-    .slot-viewport::after { top: calc(var(--item-height) * 3); }  /* 240px down */
+    .slot-viewport::before { top: calc(var(--item-height) * 2); } 
+    .slot-viewport::after { top: calc(var(--item-height) * 3); }  
 
-    /* Vignette shading fading the outer rows to emphasize the center track */
     .viewport-shade {
       position: absolute;
       top: 0;
@@ -102,20 +98,18 @@
       z-index: 3;
     }
 
-    /* Moving Reel */
     .slot-reel {
       display: flex;
       flex-direction: column;
       transform: translateY(0);
     }
 
-    /* Slot Row Item */
     .slot-item {
       height: var(--item-height);
       line-height: var(--item-height);
       font-size: 2rem;
       font-weight: bold;
-      color: #616a78; /* Muted gray for incoming/outgoing names */
+      color: #616a78; 
       text-transform: uppercase;
       letter-spacing: 1.5px;
       white-space: nowrap;
@@ -125,7 +119,6 @@
       transition: color 0.3s ease, transform 0.3s ease, font-size 0.3s ease;
     }
 
-    /* Main Winner Highlights */
     .slot-item.winner {
       color: var(--accent-color);
       font-size: 2.6rem;
@@ -133,7 +126,6 @@
       transform: scale(1.05);
     }
 
-    /* Spin Button */
     .spin-btn {
       background: linear-gradient(to bottom, #ff6b81, #ff4757);
       border: none;
@@ -166,7 +158,6 @@
       transform: translateY(5px);
     }
 
-    /* Settings Panel */
     .settings-panel {
       background-color: var(--card-bg);
       border-radius: 12px;
@@ -258,7 +249,7 @@ Ananya</textarea>
   const slotReel = document.getElementById('slotReel');
   const spinBtn = document.getElementById('spinBtn');
   const namesInput = document.getElementById('namesInput');
-  const itemHeight = 80; // Must match --item-height in CSS
+  const itemHeight = 80; 
 
   function getNames() {
     return namesInput.value
@@ -278,19 +269,17 @@ Ananya</textarea>
   function spin() {
     const names = getNames();
     
-    if (names.length === 0) {
-      alert("Please enter at least one name!");
+    if (names.length < 3) {
+      alert("Please enter at least 3 names to run cleanly!");
       return;
     }
 
     spinBtn.disabled = true;
 
-    // Reset layout position
     slotReel.style.transition = 'none';
     slotReel.style.transform = 'translateY(0)';
-    slotReel.offsetHeight; // Force reflow
+    slotReel.offsetHeight; 
 
-    // Mix up large pools of sequences to fill the scrolling track dynamically
     const block1 = shuffle([...names]);
     const block2 = shuffle([...names]);
     const block3 = shuffle([...names]);
@@ -298,16 +287,30 @@ Ananya</textarea>
     const finalWinnerIndex = Math.floor(Math.random() * names.length);
     const targetWinner = names[finalWinnerIndex];
 
-    // Build the tape array
+    // --- ANTI-DUPLICATE SHIELD LOGIC ---
+    // Row 1 & 2 read from the tail end of block3. If the winner is there, swap it away.
+    if (block3[block3.length - 1] === targetWinner) {
+      [block3[block3.length - 1], block3[0]] = [block3[0], block3[block3.length - 1]];
+    }
+    if (block3[block3.length - 2] === targetWinner) {
+      [block3[block3.length - 2], block3[1]] = [block3[1], block3[block3.length - 2]];
+    }
+
+    const remainingShuffled = shuffle([...names]);
+    // Row 4 & 5 read from the start of remainingShuffled. If the winner is there, swap it away.
+    if (remainingShuffled[0] === targetWinner) {
+      [remainingShuffled[0], remainingShuffled[remainingShuffled.length - 1]] = [remainingShuffled[remainingShuffled.length - 1], remainingShuffled[0]];
+    }
+    if (remainingShuffled[1] === targetWinner) {
+      [remainingShuffled[1], remainingShuffled[remainingShuffled.length - 2]] = [remainingShuffled[remainingShuffled.length - 2], remainingShuffled[1]];
+    }
+    // ------------------------------------
+
     const reelItems = ['🎰 ROLLING 🎰', '🎲 SPINNING 🎲', ...block1, ...block2, ...block3];
     const winnerPositionInReel = reelItems.length;
     reelItems.push(targetWinner);
-    
-    // Append extra subsequent items below so rows 4 and 5 display upcoming candidates cleanly
-    const remainingShuffled = shuffle([...names]);
     reelItems.push(...remainingShuffled);
 
-    // Populate DOM
     slotReel.innerHTML = reelItems
       .map(name => `<div class="slot-item">${name}</div>`)
       .join('');
@@ -315,12 +318,9 @@ Ananya</textarea>
     const transitionDuration = 4.2; 
     slotReel.style.transition = `transform ${transitionDuration}s cubic-bezier(0.08, 0.85, 0.2, 1)`;
     
-    // PHYSICS ALIGNMENT CORRECTION: 
-    // Since the winner must land on row 3 (index 2), we subtract exactly 2 item heights from the translation offset.
     const targetOffset = (winnerPositionInReel - 2) * itemHeight;
     slotReel.style.transform = `translateY(-${targetOffset}px)`;
 
-    // Handle spin completion sequence
     setTimeout(() => {
       const items = slotReel.querySelectorAll('.slot-item');
       const winnerElement = items[winnerPositionInReel];
