@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-Row Name Slot Machine (Anti-Duplicate)</title>
+  <title>🎃 Spooky Name Slot Machine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #ff4757;
-      --secondary-color: #2f3542;
-      --accent-color: #ffa502;
-      --bg-color: #1e222b;
-      --card-bg: #2f3542;
-      --text-color: #ffffff;
+      --primary-color: #ff7518;   /* pumpkin */
+      --primary-dark: #b34700;
+      --accent-color: #ffb347;    /* candlelight */
+      --purple: #7b3fa0;
+      --bg-color: #140c1c;
+      --card-bg: #2a1a36;
+      --text-color: #f5ecff;
       --item-height: 80px;
     }
 
@@ -23,6 +27,9 @@
     }
 
     body {
+      background:
+        radial-gradient(circle at 85% 10%, rgba(255, 179, 71, 0.18) 0, transparent 120px),
+        radial-gradient(ellipse at bottom, #2b1338 0%, var(--bg-color) 70%);
       background-color: var(--bg-color);
       color: var(--text-color);
       display: flex;
@@ -31,42 +38,71 @@
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Floating Halloween decorations */
+    .spooky {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+      animation: float 7s ease-in-out infinite;
+      user-select: none;
+    }
+    .spooky.bat1  { top: 8%;  left: 6%;  font-size: 2.2rem; animation-duration: 6s; }
+    .spooky.bat2  { top: 18%; right: 9%; font-size: 1.6rem; animation-duration: 8s; animation-delay: -2s; }
+    .spooky.ghost { bottom: 12%; left: 8%; font-size: 2.6rem; animation-duration: 9s; animation-delay: -4s; }
+    .spooky.spider{ top: 0; right: 22%; font-size: 1.8rem; animation: dangle 5s ease-in-out infinite; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(-4deg); }
+      50%      { transform: translate(14px, -18px) rotate(4deg); }
+    }
+    @keyframes dangle {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(40px); }
     }
 
     .container {
       width: 100%;
       max-width: 650px;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
       margin-bottom: 20px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      color: var(--accent-color);
-      text-shadow: 0 0 12px rgba(255, 165, 2, 0.5);
+      font-family: 'Creepster', 'Segoe UI', cursive;
+      font-weight: 400;
+      font-size: 3rem;
+      letter-spacing: 4px;
+      color: var(--primary-color);
+      text-shadow: 0 0 14px rgba(255, 117, 24, 0.6), 0 3px 0 #3d1a00;
     }
 
     .slot-machine {
-      background: linear-gradient(145px, #3a4150, #232832);
-      border: 10px solid #111;
+      background: linear-gradient(145deg, #3b2450, #1d1228);
+      border: 10px solid #0b0610;
       border-radius: 24px;
       padding: 35px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.6), 
-                  inset 0 0 25px rgba(255,255,255,0.1);
-      margin-bottom: 30px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6),
+                  0 0 40px rgba(123, 63, 160, 0.35),
+                  inset 0 0 25px rgba(255,255,255,0.08);
+      margin-bottom: 20px;
       position: relative;
     }
 
     .slot-viewport {
-      height: calc(var(--item-height) * 5); 
-      background-color: #0f1115;
+      height: calc(var(--item-height) * 5);
+      background-color: #0c0710;
       border-radius: 12px;
       overflow: hidden;
       position: relative;
       box-shadow: inset 0 25px 30px rgba(0,0,0,0.95),
                   inset 0 -25px 30px rgba(0,0,0,0.95);
-      border: 4px solid #111;
+      border: 4px solid #0b0610;
     }
 
     .slot-viewport::before, .slot-viewport::after {
@@ -78,8 +114,8 @@
       background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
       z-index: 5;
     }
-    .slot-viewport::before { top: calc(var(--item-height) * 2); } 
-    .slot-viewport::after { top: calc(var(--item-height) * 3); }  
+    .slot-viewport::before { top: calc(var(--item-height) * 2); }
+    .slot-viewport::after { top: calc(var(--item-height) * 3); }
 
     .viewport-shade {
       position: absolute;
@@ -87,13 +123,13 @@
       left: 0;
       right: 0;
       height: 100%;
-      background: linear-gradient(to bottom, 
-                    rgba(15,17,21,0.85) 0%, 
-                    rgba(15,17,21,0.4) 25%,
-                    transparent 40%, 
-                    transparent 60%, 
-                    rgba(15,17,21,0.4) 75%,
-                    rgba(15,17,21,0.85) 100%);
+      background: linear-gradient(to bottom,
+                    rgba(12,7,16,0.85) 0%,
+                    rgba(12,7,16,0.4) 25%,
+                    transparent 40%,
+                    transparent 60%,
+                    rgba(12,7,16,0.4) 75%,
+                    rgba(12,7,16,0.85) 100%);
       pointer-events: none;
       z-index: 3;
     }
@@ -107,9 +143,9 @@
     .slot-item {
       height: var(--item-height);
       line-height: var(--item-height);
-      font-size: 2rem;
+      font-size: calc(2rem * var(--fit, 1));
       font-weight: bold;
-      color: #616a78; 
+      color: #6f5a80;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       white-space: nowrap;
@@ -121,63 +157,121 @@
 
     .slot-item.winner {
       color: var(--accent-color);
-      font-size: 2.6rem;
-      text-shadow: 0 0 20px rgba(255, 165, 2, 0.8);
+      font-size: calc(2.6rem * var(--fit, 1));
+      text-shadow: 0 0 20px rgba(255, 117, 24, 0.9);
       transform: scale(1.05);
     }
 
     .spin-btn {
-      background: linear-gradient(to bottom, #ff6b81, #ff4757);
+      background: linear-gradient(to bottom, #ff9a4d, var(--primary-color));
       border: none;
       border-radius: 50px;
-      color: white;
+      color: #1a0b00;
       font-size: 1.6rem;
       font-weight: bold;
       padding: 18px 45px;
       cursor: pointer;
       margin-top: 25px;
-      box-shadow: 0 6px 0 #b33939, 0 10px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 0 var(--primary-dark), 0 10px 20px rgba(0,0,0,0.4);
       transition: all 0.1s ease;
       width: 100%;
       letter-spacing: 1.5px;
     }
 
     .spin-btn:hover {
-      background: linear-gradient(to bottom, #ff7f93, #ff5263);
+      background: linear-gradient(to bottom, #ffab66, #ff8533);
     }
 
     .spin-btn:active {
       transform: translateY(5px);
-      box-shadow: 0 1px 0 #b33939, 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 1px 0 var(--primary-dark), 0 4px 12px rgba(0,0,0,0.4);
     }
 
     .spin-btn:disabled {
-      background: #57606f;
+      background: #4a3a57;
+      color: #a99bb5;
       box-shadow: none;
       cursor: not-allowed;
       transform: translateY(5px);
+    }
+
+    .result {
+      min-height: 1.6em;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: var(--accent-color);
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: #c9b6d9;
+      margin-bottom: 10px;
+    }
+
+    .status-bar label {
+      cursor: pointer;
+    }
+
+    .small-btn {
+      background: transparent;
+      border: 2px solid var(--purple);
+      color: #e2cdf2;
+      border-radius: 20px;
+      padding: 5px 14px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .small-btn:hover {
+      background: var(--purple);
     }
 
     .settings-panel {
       background-color: var(--card-bg);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
       margin-top: 10px;
+      text-align: left;
     }
 
     .settings-panel summary {
       cursor: pointer;
       font-weight: 600;
-      color: #a4b0be;
+      color: #c9b6d9;
       outline: none;
+    }
+
+    .picked-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .picked-list span {
+      background: #3d2650;
+      border-radius: 12px;
+      padding: 3px 10px;
+      font-size: 0.9rem;
+    }
+
+    .picked-list .empty {
+      background: none;
+      color: #8f7aa3;
+      padding: 0;
     }
 
     textarea {
       width: 100%;
       height: 150px;
-      background-color: #1e222b;
-      border: 2px solid #57606f;
+      background-color: #170e1f;
+      border: 2px solid #5a3f70;
       border-radius: 8px;
       color: #fff;
       padding: 10px;
@@ -185,59 +279,89 @@
       resize: vertical;
       font-size: 1rem;
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spooky { animation: none; }
+    }
   </style>
 </head>
 <body>
 
+<div class="spooky bat1" aria-hidden="true">🦇</div>
+<div class="spooky bat2" aria-hidden="true">🦇</div>
+<div class="spooky ghost" aria-hidden="true">👻</div>
+<div class="spooky spider" aria-hidden="true">🕷️</div>
+
 <div class="container">
-  <h1>NAME ROULETTE</h1>
+  <h1>🎃 NAME ROULETTE 🎃</h1>
 
   <div class="slot-machine">
     <div class="slot-viewport">
       <div class="viewport-shade"></div>
       <div class="slot-reel" id="slotReel">
-        <div class="slot-item">READY</div>
-        <div class="slot-item">READY</div>
-        <div class="slot-item winner">SPIN!</div>
-        <div class="slot-item">READY</div>
-        <div class="slot-item">READY</div>
+        <div class="slot-item">🕸️</div>
+        <div class="slot-item">🦇</div>
+        <div class="slot-item winner">SPIN IF YOU DARE</div>
+        <div class="slot-item">🦇</div>
+        <div class="slot-item">🕸️</div>
       </div>
     </div>
-    
-    <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN!</button>
+
+    <button class="spin-btn" id="spinBtn" onclick="spin()">🎃 SPIN! 🎃</button>
+  </div>
+
+  <div class="result" id="result" aria-live="polite"></div>
+
+  <div class="status-bar">
+    <label>
+      <input type="checkbox" id="noRepeats" checked>
+      No repeats until everyone's been picked
+    </label>
+    <span id="remaining"></span>
+    <button class="small-btn" id="resetBtn" onclick="resetRound()">🪦 Reset round</button>
   </div>
 
   <details class="settings-panel">
+    <summary>Already picked this round</summary>
+    <div class="picked-list" id="pickedList"></div>
+  </details>
+
+  <details class="settings-panel">
     <summary>Edit Names List</summary>
-    <textarea id="namesInput">Kelsey
-Indrayani
-Francis
-David
-Coleman
-Pierce
-Ramesh
-Philip
-Justin
-Chloe
-Roman
-Tai
-Monica
-Hannah
+    <textarea id="namesInput">Alex
 Aya
+Marina
+Cameron
+Carolyn
+Chloe
+Coleman
+Daniela
+Danny
+David
+Ella
+Emma
+Francis
+Hannah
+Hope
+Indrayani
+Jaquelyn
 Jake
 Jing Wen
-Mark
-Raciel
-Ella
-Kenneth
-Jaquelyn
-Sammy
-JohnJack
-Danny
-Laura
-Cameron
 JohnPaul
-Alex
+JohnJack
+Justin
+Kelsey
+Kenneth
+Laura
+Mark
+Monica
+Philip
+Pierce
+Raciel
+Ramesh
+Roman
+Sammy
+Tai
 </textarea>
   </details>
 </div>
@@ -246,87 +370,195 @@ Alex
   const slotReel = document.getElementById('slotReel');
   const spinBtn = document.getElementById('spinBtn');
   const namesInput = document.getElementById('namesInput');
-  const itemHeight = 80; 
+  const noRepeatsBox = document.getElementById('noRepeats');
+  const resultEl = document.getElementById('result');
+  const remainingEl = document.getElementById('remaining');
+  const pickedListEl = document.getElementById('pickedList');
+  const itemHeight = 80; // must match --item-height
+
+  const STORAGE_KEY = 'nameWheel.state';
+  const SPOOKY_FILLERS = ['🎃 ROLLING 🎃', '👻 SPINNING 👻'];
+  const WINNER_LINES = [
+    'The spirits have chosen',
+    'The cauldron bubbles and reveals',
+    'The ghosts whisper the name of',
+    'The bats have spotted',
+    'From beyond the grave comes'
+  ];
+
+  // State persisted across page reloads: who has already been picked this round.
+  let state = loadState();
+
+  function loadState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved && Array.isArray(saved.picked)) {
+        return { picked: saved.picked, lastWinner: saved.lastWinner || null, noRepeats: saved.noRepeats !== false };
+      }
+    } catch (e) { /* ignore corrupt storage */ }
+    return { picked: [], lastWinner: null, noRepeats: true };
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* storage may be unavailable (private mode) */ }
+  }
 
   function getNames() {
+    const seen = new Set();
     return namesInput.value
       .split('\n')
       .map(name => name.trim())
-      .filter(name => name.length > 0);
+      .filter(name => name.length > 0 && !seen.has(name) && seen.add(name));
   }
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+  // Unbiased random integer in [0, max) using the browser's cryptographic RNG.
+  function randInt(max) {
+    const limit = Math.floor(0x100000000 / max) * max;
+    const buf = new Uint32Array(1);
+    do {
+      crypto.getRandomValues(buf);
+    } while (buf[0] >= limit);
+    return buf[0] % max;
+  }
+
+  // Pick the winner. In no-repeat mode, draw only from people not yet picked
+  // this round; once everyone has had a turn, a new round starts automatically.
+  function drawWinner(names) {
+    let candidates = names;
+
+    if (state.noRepeats) {
+      candidates = names.filter(n => !state.picked.includes(n));
+      if (candidates.length === 0) {
+        state.picked = [];
+        candidates = names;
+      }
     }
-    return array;
+
+    // Never pick the same person twice in a row (including across rounds).
+    if (candidates.length > 1 && state.lastWinner) {
+      candidates = candidates.filter(n => n !== state.lastWinner);
+    }
+
+    const winner = candidates[randInt(candidates.length)];
+    state.lastWinner = winner;
+    if (state.noRepeats) state.picked.push(winner);
+    saveState();
+    return winner;
+  }
+
+  // Pick a random name from the pool, avoiding `avoid` (the row above) if possible.
+  function pickDifferent(pool, avoid) {
+    const choices = pool.length > 1 ? pool.filter(n => n !== avoid) : pool;
+    return choices[randInt(choices.length)];
+  }
+
+  // Build the reel: random names to scroll through, then the winner, then a tail.
+  // The same name never appears in two neighbouring rows, and the two rows
+  // above and below the winner never show the winner's name.
+  function buildReel(names, winner) {
+    const others = names.filter(n => n !== winner);
+    const reel = [...SPOOKY_FILLERS];
+    const scrollRows = Math.max(60, names.length * 3);
+
+    for (let i = 0; i < scrollRows; i++) {
+      reel.push(pickDifferent(names, reel[reel.length - 1]));
+    }
+    // Two rows just above the winner come from everyone except the winner.
+    for (let i = 0; i < 2; i++) {
+      reel.push(pickDifferent(others, reel[reel.length - 1]));
+    }
+
+    const winnerIndex = reel.length;
+    reel.push(winner);
+
+    for (let i = 0; i < 2; i++) {
+      reel.push(pickDifferent(others, reel[reel.length - 1]));
+    }
+
+    return { reel, winnerIndex };
+  }
+
+  function renderReel(items) {
+    slotReel.replaceChildren(...items.map(text => {
+      const div = document.createElement('div');
+      div.className = 'slot-item';
+      div.textContent = text;
+      // Shrink long names so they fit (winner row is ~17 characters wide at full size).
+      if (text.length > 17) div.style.setProperty('--fit', (17 / text.length).toFixed(3));
+      return div;
+    }));
+  }
+
+  function updateStatus() {
+    const names = getNames();
+    if (state.noRepeats) {
+      const picked = state.picked.filter(n => names.includes(n));
+      remainingEl.textContent = `🍬 ${names.length - picked.length} of ${names.length} left this round`;
+      pickedListEl.replaceChildren(...(picked.length
+        ? picked.map(n => Object.assign(document.createElement('span'), { textContent: n }))
+        : [Object.assign(document.createElement('span'), { className: 'empty', textContent: 'Nobody yet…' })]));
+    } else {
+      remainingEl.textContent = '🎲 Every spin is independent';
+      pickedListEl.replaceChildren(Object.assign(document.createElement('span'), {
+        className: 'empty', textContent: 'Turn on "No repeats" to track this.'
+      }));
+    }
+  }
+
+  function resetRound() {
+    state.picked = [];
+    state.lastWinner = null;
+    saveState();
+    resultEl.textContent = '';
+    updateStatus();
   }
 
   function spin() {
     const names = getNames();
-    
-    if (names.length < 3) {
-      alert("Please enter at least 3 names to run cleanly!");
+
+    if (names.length < 2) {
+      alert('Please enter at least 2 names!');
       return;
     }
 
     spinBtn.disabled = true;
+    resultEl.textContent = '';
 
     slotReel.style.transition = 'none';
     slotReel.style.transform = 'translateY(0)';
-    slotReel.offsetHeight; 
+    slotReel.offsetHeight; // force reflow so the reset takes effect
 
-    const block1 = shuffle([...names]);
-    const block2 = shuffle([...names]);
-    const block3 = shuffle([...names]);
-    
-    const finalWinnerIndex = Math.floor(Math.random() * names.length);
-    const targetWinner = names[finalWinnerIndex];
+    const winner = drawWinner(names);
+    const { reel, winnerIndex } = buildReel(names, winner);
+    renderReel(reel);
 
-    // --- ANTI-DUPLICATE SHIELD LOGIC ---
-    // Row 1 & 2 read from the tail end of block3. If the winner is there, swap it away.
-    if (block3[block3.length - 1] === targetWinner) {
-      [block3[block3.length - 1], block3[0]] = [block3[0], block3[block3.length - 1]];
-    }
-    if (block3[block3.length - 2] === targetWinner) {
-      [block3[block3.length - 2], block3[1]] = [block3[1], block3[block3.length - 2]];
-    }
-
-    const remainingShuffled = shuffle([...names]);
-    // Row 4 & 5 read from the start of remainingShuffled. If the winner is there, swap it away.
-    if (remainingShuffled[0] === targetWinner) {
-      [remainingShuffled[0], remainingShuffled[remainingShuffled.length - 1]] = [remainingShuffled[remainingShuffled.length - 1], remainingShuffled[0]];
-    }
-    if (remainingShuffled[1] === targetWinner) {
-      [remainingShuffled[1], remainingShuffled[remainingShuffled.length - 2]] = [remainingShuffled[remainingShuffled.length - 2], remainingShuffled[1]];
-    }
-    // ------------------------------------
-
-    const reelItems = ['🎰 ROLLING 🎰', '🎲 SPINNING 🎲', ...block1, ...block2, ...block3];
-    const winnerPositionInReel = reelItems.length;
-    reelItems.push(targetWinner);
-    reelItems.push(...remainingShuffled);
-
-    slotReel.innerHTML = reelItems
-      .map(name => `<div class="slot-item">${name}</div>`)
-      .join('');
-
-    const transitionDuration = 4.2; 
+    const transitionDuration = 4.2;
     slotReel.style.transition = `transform ${transitionDuration}s cubic-bezier(0.08, 0.85, 0.2, 1)`;
-    
-    const targetOffset = (winnerPositionInReel - 2) * itemHeight;
+
+    const targetOffset = (winnerIndex - 2) * itemHeight;
     slotReel.style.transform = `translateY(-${targetOffset}px)`;
 
     setTimeout(() => {
-      const items = slotReel.querySelectorAll('.slot-item');
-      const winnerElement = items[winnerPositionInReel];
+      const winnerElement = slotReel.children[winnerIndex];
       if (winnerElement) {
         winnerElement.classList.add('winner');
       }
+      resultEl.textContent = `🦇 ${WINNER_LINES[randInt(WINNER_LINES.length)]}: ${winner}! 🦇`;
       spinBtn.disabled = false;
+      updateStatus();
     }, transitionDuration * 1000);
   }
+
+  noRepeatsBox.checked = state.noRepeats;
+  noRepeatsBox.addEventListener('change', () => {
+    state.noRepeats = noRepeatsBox.checked;
+    saveState();
+    updateStatus();
+  });
+  namesInput.addEventListener('input', updateStatus);
+  updateStatus();
 </script>
 
 </body>
