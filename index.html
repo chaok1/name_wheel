@@ -3,33 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎃 Spooky Name Slot Machine</title>
+  <title>🦃 Thanksgiving Name Slot Machine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #ff7518;   /* pumpkin */
-      --primary-dark: #b34700;
-      --accent-color: #ffb347;    /* candlelight */
-      --purple: #7b3fa0;
-      --bg-color: #140c1c;
-      --card-bg: #2a1a36;
-      --text-color: #f5ecff;
+      --primary-color: #e07b2e;   /* roasted squash */
+      --primary-dark: #8b3a0f;
+      --accent-color: #f4c430;    /* harvest gold */
+      --cranberry: #9e1b32;
+      --bg-color: #1e120b;
+      --card-bg: #3a2416;
+      --text-color: #fff4e3;
       --item-height: 80px;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
     body {
       background:
-        radial-gradient(circle at 85% 10%, rgba(255, 179, 71, 0.18) 0, transparent 120px),
-        radial-gradient(ellipse at bottom, #2b1338 0%, var(--bg-color) 70%);
+        radial-gradient(circle at 50% 0%, rgba(244, 196, 48, 0.15) 0, transparent 320px),
+        radial-gradient(ellipse at bottom, #4a2a16 0%, var(--bg-color) 70%);
       background-color: var(--bg-color);
       color: var(--text-color);
       display: flex;
@@ -41,27 +39,42 @@
       overflow-x: hidden;
     }
 
-    /* Floating Halloween decorations */
-    .spooky {
+    /* Falling autumn leaves */
+    .leaf {
+      position: fixed;
+      top: -10vh;
+      left: var(--x);
+      font-size: var(--size);
+      opacity: 0.6;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      animation: fall var(--dur) linear var(--delay) infinite;
+    }
+    @keyframes fall {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      25%  { transform: translate(var(--drift), 30vh) rotate(calc(var(--spin) * 0.25)); }
+      50%  { transform: translate(calc(var(--drift) * -1), 60vh) rotate(calc(var(--spin) * 0.5)); }
+      75%  { transform: translate(var(--drift), 90vh) rotate(calc(var(--spin) * 0.75)); }
+      100% { transform: translate(0, 120vh) rotate(var(--spin)); }
+    }
+
+    /* Floating harvest decorations */
+    .harvest {
       position: fixed;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.55;
+      opacity: 0.6;
       animation: float 7s ease-in-out infinite;
       user-select: none;
     }
-    .spooky.bat1  { top: 8%;  left: 6%;  font-size: 2.2rem; animation-duration: 6s; }
-    .spooky.bat2  { top: 18%; right: 9%; font-size: 1.6rem; animation-duration: 8s; animation-delay: -2s; }
-    .spooky.ghost { bottom: 12%; left: 8%; font-size: 2.6rem; animation-duration: 9s; animation-delay: -4s; }
-    .spooky.spider{ top: 0; right: 22%; font-size: 1.8rem; animation: dangle 5s ease-in-out infinite; }
-
+    .harvest.turkey { bottom: 10%; left: 7%;  font-size: 3rem;   animation-duration: 6s; }
+    .harvest.corn   { top: 12%;    left: 8%;  font-size: 2rem;   animation-duration: 8s; animation-delay: -2s; }
+    .harvest.pie    { bottom: 14%; right: 8%; font-size: 2.4rem; animation-duration: 9s; animation-delay: -4s; }
+    .harvest.wheat  { top: 14%;    right: 10%; font-size: 2rem;  animation-duration: 7s; animation-delay: -3s; }
     @keyframes float {
       0%, 100% { transform: translate(0, 0) rotate(-4deg); }
-      50%      { transform: translate(14px, -18px) rotate(4deg); }
-    }
-    @keyframes dangle {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(40px); }
+      50%      { transform: translate(10px, -14px) rotate(4deg); }
     }
 
     .container {
@@ -71,52 +84,49 @@
       position: relative;
       z-index: 1;
     }
-
     h1 {
       margin-bottom: 20px;
-      font-family: 'Creepster', 'Segoe UI', cursive;
+      font-family: 'Lobster', 'Segoe UI', cursive;
       font-weight: 400;
       font-size: 3rem;
-      letter-spacing: 4px;
+      letter-spacing: 2px;
       color: var(--primary-color);
-      text-shadow: 0 0 14px rgba(255, 117, 24, 0.6), 0 3px 0 #3d1a00;
+      text-shadow: 0 0 14px rgba(244, 196, 48, 0.45), 0 3px 0 #4a1f05;
     }
-
     .slot-machine {
-      background: linear-gradient(145deg, #3b2450, #1d1228);
-      border: 10px solid #0b0610;
+      background:
+        repeating-linear-gradient(100deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 14px),
+        linear-gradient(145deg, #6b4226, #3b2314);
+      border: 10px solid #2a170c;
       border-radius: 24px;
       padding: 35px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.6),
-                  0 0 40px rgba(123, 63, 160, 0.35),
+                  0 0 40px rgba(224, 123, 46, 0.3),
                   inset 0 0 25px rgba(255,255,255,0.08);
       margin-bottom: 20px;
       position: relative;
     }
-
     .slot-viewport {
       height: calc(var(--item-height) * 5);
-      background-color: #0c0710;
+      background-color: #1a0f08;
       border-radius: 12px;
       overflow: hidden;
       position: relative;
       box-shadow: inset 0 25px 30px rgba(0,0,0,0.95),
                   inset 0 -25px 30px rgba(0,0,0,0.95);
-      border: 4px solid #0b0610;
+      border: 4px solid #2a170c;
     }
-
     .slot-viewport::before, .slot-viewport::after {
       content: '';
       position: absolute;
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
       z-index: 5;
     }
     .slot-viewport::before { top: calc(var(--item-height) * 2); }
     .slot-viewport::after { top: calc(var(--item-height) * 3); }
-
     .viewport-shade {
       position: absolute;
       top: 0;
@@ -124,28 +134,26 @@
       right: 0;
       height: 100%;
       background: linear-gradient(to bottom,
-                    rgba(12,7,16,0.85) 0%,
-                    rgba(12,7,16,0.4) 25%,
+                    rgba(26,15,8,0.85) 0%,
+                    rgba(26,15,8,0.4) 25%,
                     transparent 40%,
                     transparent 60%,
-                    rgba(12,7,16,0.4) 75%,
-                    rgba(12,7,16,0.85) 100%);
+                    rgba(26,15,8,0.4) 75%,
+                    rgba(26,15,8,0.85) 100%);
       pointer-events: none;
       z-index: 3;
     }
-
     .slot-reel {
       display: flex;
       flex-direction: column;
       transform: translateY(0);
     }
-
     .slot-item {
       height: var(--item-height);
       line-height: var(--item-height);
       font-size: calc(2rem * var(--fit, 1));
       font-weight: bold;
-      color: #6f5a80;
+      color: #a08068;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       white-space: nowrap;
@@ -154,19 +162,17 @@
       padding: 0 20px;
       transition: color 0.3s ease, transform 0.3s ease, font-size 0.3s ease;
     }
-
     .slot-item.winner {
       color: var(--accent-color);
       font-size: calc(2.6rem * var(--fit, 1));
-      text-shadow: 0 0 20px rgba(255, 117, 24, 0.9);
+      text-shadow: 0 0 20px rgba(244, 196, 48, 0.85);
       transform: scale(1.05);
     }
-
     .spin-btn {
-      background: linear-gradient(to bottom, #ff9a4d, var(--primary-color));
+      background: linear-gradient(to bottom, #f0a050, var(--primary-color));
       border: none;
       border-radius: 50px;
-      color: #1a0b00;
+      color: #2a1205;
       font-size: 1.6rem;
       font-weight: bold;
       padding: 18px 45px;
@@ -177,31 +183,26 @@
       width: 100%;
       letter-spacing: 1.5px;
     }
-
     .spin-btn:hover {
-      background: linear-gradient(to bottom, #ffab66, #ff8533);
+      background: linear-gradient(to bottom, #f5b46a, #e88a40);
     }
-
     .spin-btn:active {
       transform: translateY(5px);
       box-shadow: 0 1px 0 var(--primary-dark), 0 4px 12px rgba(0,0,0,0.4);
     }
-
     .spin-btn:disabled {
-      background: #4a3a57;
-      color: #a99bb5;
+      background: #5a4232;
+      color: #b8a08c;
       box-shadow: none;
       cursor: not-allowed;
       transform: translateY(5px);
     }
-
     .result {
       min-height: 1.6em;
       font-size: 1.3rem;
       margin-bottom: 15px;
       color: var(--accent-color);
     }
-
     .status-bar {
       display: flex;
       align-items: center;
@@ -209,28 +210,24 @@
       gap: 10px;
       flex-wrap: wrap;
       font-size: 0.95rem;
-      color: #c9b6d9;
+      color: #e6cfb3;
       margin-bottom: 10px;
     }
-
     .status-bar label {
       cursor: pointer;
     }
-
     .small-btn {
       background: transparent;
-      border: 2px solid var(--purple);
-      color: #e2cdf2;
+      border: 2px solid var(--cranberry);
+      color: #f5d9c4;
       border-radius: 20px;
       padding: 5px 14px;
       cursor: pointer;
       font-size: 0.9rem;
     }
-
     .small-btn:hover {
-      background: var(--purple);
+      background: var(--cranberry);
     }
-
     .settings-panel {
       background-color: var(--card-bg);
       border-radius: 12px;
@@ -239,39 +236,34 @@
       margin-top: 10px;
       text-align: left;
     }
-
     .settings-panel summary {
       cursor: pointer;
       font-weight: 600;
-      color: #c9b6d9;
+      color: #e6cfb3;
       outline: none;
     }
-
     .picked-list {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-top: 12px;
     }
-
     .picked-list span {
-      background: #3d2650;
+      background: #5a3520;
       border-radius: 12px;
       padding: 3px 10px;
       font-size: 0.9rem;
     }
-
     .picked-list .empty {
       background: none;
-      color: #8f7aa3;
+      color: #b09078;
       padding: 0;
     }
-
     textarea {
       width: 100%;
       height: 150px;
-      background-color: #170e1f;
-      border: 2px solid #5a3f70;
+      background-color: #24160d;
+      border: 2px solid #7a4e2d;
       border-radius: 8px;
       color: #fff;
       padding: 10px;
@@ -279,55 +271,59 @@
       resize: vertical;
       font-size: 1rem;
     }
-
     @media (prefers-reduced-motion: reduce) {
-      .spooky { animation: none; }
+      .harvest { animation: none; }
+      .leaf { display: none; }
     }
   </style>
 </head>
 <body>
+<!-- Falling leaves -->
+<div class="leaf" aria-hidden="true" style="--x:4%;  --size:1.6rem; --dur:13s; --delay:0s;   --drift:40px; --spin:360deg;">🍂</div>
+<div class="leaf" aria-hidden="true" style="--x:16%; --size:1.2rem; --dur:10s; --delay:-6s;  --drift:30px; --spin:-300deg;">🍁</div>
+<div class="leaf" aria-hidden="true" style="--x:29%; --size:1.8rem; --dur:15s; --delay:-3s;  --drift:50px; --spin:420deg;">🍂</div>
+<div class="leaf" aria-hidden="true" style="--x:43%; --size:1.3rem; --dur:12s; --delay:-9s;  --drift:35px; --spin:-360deg;">🍁</div>
+<div class="leaf" aria-hidden="true" style="--x:58%; --size:1.5rem; --dur:14s; --delay:-1s;  --drift:45px; --spin:300deg;">🍂</div>
+<div class="leaf" aria-hidden="true" style="--x:71%; --size:1.2rem; --dur:11s; --delay:-7s;  --drift:30px; --spin:-420deg;">🍁</div>
+<div class="leaf" aria-hidden="true" style="--x:84%; --size:1.7rem; --dur:16s; --delay:-4s;  --drift:55px; --spin:360deg;">🍂</div>
+<div class="leaf" aria-hidden="true" style="--x:94%; --size:1.3rem; --dur:12s; --delay:-10s; --drift:25px; --spin:-300deg;">🍁</div>
 
-<div class="spooky bat1" aria-hidden="true">🦇</div>
-<div class="spooky bat2" aria-hidden="true">🦇</div>
-<div class="spooky ghost" aria-hidden="true">👻</div>
-<div class="spooky spider" aria-hidden="true">🕷️</div>
+<!-- Corner decorations -->
+<div class="harvest turkey" aria-hidden="true">🦃</div>
+<div class="harvest corn" aria-hidden="true">🌽</div>
+<div class="harvest pie" aria-hidden="true">🥧</div>
+<div class="harvest wheat" aria-hidden="true">🌾</div>
 
 <div class="container">
-  <h1>🎃 NAME ROULETTE 🎃</h1>
-
+  <h1>🦃 Name Roulette 🦃</h1>
   <div class="slot-machine">
     <div class="slot-viewport">
       <div class="viewport-shade"></div>
       <div class="slot-reel" id="slotReel">
-        <div class="slot-item">🕸️</div>
-        <div class="slot-item">🦇</div>
-        <div class="slot-item winner">SPIN IF YOU DARE</div>
-        <div class="slot-item">🦇</div>
-        <div class="slot-item">🕸️</div>
+        <div class="slot-item">🍂</div>
+        <div class="slot-item">🌽</div>
+        <div class="slot-item winner">GOBBLE GOBBLE!</div>
+        <div class="slot-item">🌽</div>
+        <div class="slot-item">🍂</div>
       </div>
     </div>
-
-    <button class="spin-btn" id="spinBtn" onclick="spin()">🎃 SPIN! 🎃</button>
+    <button class="spin-btn" id="spinBtn" onclick="spin()">🦃 SPIN! 🦃</button>
   </div>
-
   <div class="result" id="result" aria-live="polite"></div>
-
   <div class="status-bar">
     <label>
       <input type="checkbox" id="noRepeats" checked>
-      No repeats until everyone's been picked
+      No second helpings until everyone's been served
     </label>
     <span id="remaining"></span>
-    <button class="small-btn" id="resetBtn" onclick="resetRound()">🪦 Reset round</button>
+    <button class="small-btn" id="resetBtn" onclick="resetRound()">🍽️ Reset round</button>
   </div>
-
   <details class="settings-panel">
-    <summary>Already picked this round</summary>
+    <summary>Already served this round</summary>
     <div class="picked-list" id="pickedList"></div>
   </details>
-
   <details class="settings-panel">
-    <summary>Edit Names List</summary>
+    <summary>Edit Guest List</summary>
     <textarea id="namesInput">Alex
 Aya
 Marina
@@ -365,7 +361,6 @@ Tai
 </textarea>
   </details>
 </div>
-
 <script>
   const slotReel = document.getElementById('slotReel');
   const spinBtn = document.getElementById('spinBtn');
@@ -375,20 +370,18 @@ Tai
   const remainingEl = document.getElementById('remaining');
   const pickedListEl = document.getElementById('pickedList');
   const itemHeight = 80; // must match --item-height
-
   const STORAGE_KEY = 'nameWheel.state';
-  const SPOOKY_FILLERS = ['🎃 ROLLING 🎃', '👻 SPINNING 👻'];
+  const HARVEST_FILLERS = ['🦃 GOBBLING 🦃', '🥧 SPINNING 🥧'];
   const WINNER_LINES = [
-    'The spirits have chosen',
-    'The cauldron bubbles and reveals',
-    'The ghosts whisper the name of',
-    'The bats have spotted',
-    'From beyond the grave comes'
+    'The turkey has gobbled out',
+    'The wishbone snaps in favor of',
+    "Grandma's recipe card reveals",
+    'Fresh out of the oven comes',
+    'Please pass the gravy to',
+    'The cornucopia overflows with'
   ];
-
   // State persisted across page reloads: who has already been picked this round.
   let state = loadState();
-
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -398,13 +391,11 @@ Tai
     } catch (e) { /* ignore corrupt storage */ }
     return { picked: [], lastWinner: null, noRepeats: true };
   }
-
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (e) { /* storage may be unavailable (private mode) */ }
   }
-
   function getNames() {
     const seen = new Set();
     return namesInput.value
@@ -412,7 +403,6 @@ Tai
       .map(name => name.trim())
       .filter(name => name.length > 0 && !seen.has(name) && seen.add(name));
   }
-
   // Unbiased random integer in [0, max) using the browser's cryptographic RNG.
   function randInt(max) {
     const limit = Math.floor(0x100000000 / max) * max;
@@ -422,12 +412,10 @@ Tai
     } while (buf[0] >= limit);
     return buf[0] % max;
   }
-
   // Pick the winner. In no-repeat mode, draw only from people not yet picked
   // this round; once everyone has had a turn, a new round starts automatically.
   function drawWinner(names) {
     let candidates = names;
-
     if (state.noRepeats) {
       candidates = names.filter(n => !state.picked.includes(n));
       if (candidates.length === 0) {
@@ -435,33 +423,28 @@ Tai
         candidates = names;
       }
     }
-
     // Never pick the same person twice in a row (including across rounds).
     if (candidates.length > 1 && state.lastWinner) {
       candidates = candidates.filter(n => n !== state.lastWinner);
     }
-
     const winner = candidates[randInt(candidates.length)];
     state.lastWinner = winner;
     if (state.noRepeats) state.picked.push(winner);
     saveState();
     return winner;
   }
-
   // Pick a random name from the pool, avoiding `avoid` (the row above) if possible.
   function pickDifferent(pool, avoid) {
     const choices = pool.length > 1 ? pool.filter(n => n !== avoid) : pool;
     return choices[randInt(choices.length)];
   }
-
   // Build the reel: random names to scroll through, then the winner, then a tail.
   // The same name never appears in two neighbouring rows, and the two rows
   // above and below the winner never show the winner's name.
   function buildReel(names, winner) {
     const others = names.filter(n => n !== winner);
-    const reel = [...SPOOKY_FILLERS];
+    const reel = [...HARVEST_FILLERS];
     const scrollRows = Math.max(60, names.length * 3);
-
     for (let i = 0; i < scrollRows; i++) {
       reel.push(pickDifferent(names, reel[reel.length - 1]));
     }
@@ -469,17 +452,13 @@ Tai
     for (let i = 0; i < 2; i++) {
       reel.push(pickDifferent(others, reel[reel.length - 1]));
     }
-
     const winnerIndex = reel.length;
     reel.push(winner);
-
     for (let i = 0; i < 2; i++) {
       reel.push(pickDifferent(others, reel[reel.length - 1]));
     }
-
     return { reel, winnerIndex };
   }
-
   function renderReel(items) {
     slotReel.replaceChildren(...items.map(text => {
       const div = document.createElement('div');
@@ -490,23 +469,21 @@ Tai
       return div;
     }));
   }
-
   function updateStatus() {
     const names = getNames();
     if (state.noRepeats) {
       const picked = state.picked.filter(n => names.includes(n));
-      remainingEl.textContent = `🍬 ${names.length - picked.length} of ${names.length} left this round`;
+      remainingEl.textContent = `🥧 ${names.length - picked.length} of ${names.length} left at the table`;
       pickedListEl.replaceChildren(...(picked.length
         ? picked.map(n => Object.assign(document.createElement('span'), { textContent: n }))
-        : [Object.assign(document.createElement('span'), { className: 'empty', textContent: 'Nobody yet…' })]));
+        : [Object.assign(document.createElement('span'), { className: 'empty', textContent: "Nobody's been served yet…" })]));
     } else {
-      remainingEl.textContent = '🎲 Every spin is independent';
+      remainingEl.textContent = '🍗 Every spin is independent';
       pickedListEl.replaceChildren(Object.assign(document.createElement('span'), {
-        className: 'empty', textContent: 'Turn on "No repeats" to track this.'
+        className: 'empty', textContent: 'Turn on "No second helpings" to track this.'
       }));
     }
   }
-
   function resetRound() {
     state.picked = [];
     state.lastWinner = null;
@@ -514,43 +491,34 @@ Tai
     resultEl.textContent = '';
     updateStatus();
   }
-
   function spin() {
     const names = getNames();
-
     if (names.length < 2) {
-      alert('Please enter at least 2 names!');
+      alert('🦃 Please enter at least 2 names!');
       return;
     }
-
     spinBtn.disabled = true;
     resultEl.textContent = '';
-
     slotReel.style.transition = 'none';
     slotReel.style.transform = 'translateY(0)';
     slotReel.offsetHeight; // force reflow so the reset takes effect
-
     const winner = drawWinner(names);
     const { reel, winnerIndex } = buildReel(names, winner);
     renderReel(reel);
-
     const transitionDuration = 4.2;
     slotReel.style.transition = `transform ${transitionDuration}s cubic-bezier(0.08, 0.85, 0.2, 1)`;
-
     const targetOffset = (winnerIndex - 2) * itemHeight;
     slotReel.style.transform = `translateY(-${targetOffset}px)`;
-
     setTimeout(() => {
       const winnerElement = slotReel.children[winnerIndex];
       if (winnerElement) {
         winnerElement.classList.add('winner');
       }
-      resultEl.textContent = `🦇 ${WINNER_LINES[randInt(WINNER_LINES.length)]}: ${winner}! 🦇`;
+      resultEl.textContent = `🍁 ${WINNER_LINES[randInt(WINNER_LINES.length)]}: ${winner}! 🍁`;
       spinBtn.disabled = false;
       updateStatus();
     }, transitionDuration * 1000);
   }
-
   noRepeatsBox.checked = state.noRepeats;
   noRepeatsBox.addEventListener('change', () => {
     state.noRepeats = noRepeatsBox.checked;
@@ -560,6 +528,5 @@ Tai
   namesInput.addEventListener('input', updateStatus);
   updateStatus();
 </script>
-
 </body>
 </html>
